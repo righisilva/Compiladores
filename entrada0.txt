@@ -1,0 +1,7 @@
+define variavel 10000
+
+
+
+
+inteiro teste = "10";
+teste + teste

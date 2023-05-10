@@ -1,0 +1,532 @@
+Terminais sem uso na gramática
+
+    OU
+    NEGACAO
+    MAISMAIS
+    MENOSMENOS
+    VIRGULA
+    DOISPONTOS
+    ASPASIMPLES
+    ABRECOLCHETE
+    FECHACOLCHETE
+    ABRECHAVE
+    FECHACHAVE
+    MENOR
+    MAIOR
+    IGUAL
+    MENORIGUAL
+    MAIORIGUAL
+    IGUALIGUAL
+    ECOMERCIAL
+    DIFERENTE
+    PORCENTO
+    SUSTENIDO
+    TABULACAO
+    ASPADUPLA
+    VERDADEIRO
+    FALSO
+    SE
+    ENTAO
+    SENAO
+    ENQUANTO
+    FAZ
+    PARA
+    INICIA
+    TERMINA
+    DEFINE
+    PRINCIPAL
+    RETORNA
+    INCLUE
+    IMPRIME
+    INTEIRO
+    QUEBRADO
+    EXPOENTE
+    IDENTIFICADOR
+    FRASE
+    ESPECIAL
+
+
+Estado 15 conflitos: 2 de deslocamento/redução
+
+
+Gramática
+
+    0 $accept: code $end
+
+    1 code: declaracoes acoes
+    2     | acoes
+
+    3 declaracoes: declaracao
+    4            | declaracoes declaracao
+
+    5 declaracao: tipo id pontuacao
+
+    6 acoes: acao
+    7      | acoes acao
+
+    8 acao: expressoes
+
+    9 expressoes: expressao
+   10           | expressoes expressao
+   11           | pontuacao expressao pontuacao
+
+   12 expressao: id operador id
+
+   13 tipo: DEF_INT
+   14     | DEF_FLOAT
+   15     | DEF_CHAR
+   16     | DEF_STRING
+
+   17 id: PALAVRA
+   18   | LETRA
+
+   19 pontuacao: PONTOVIRGULA
+   20          | ABREPARENTESE
+   21          | FECHAPARENTESE
+
+   22 operador: MAIS
+   23         | MENOS
+   24         | VEZES
+   25         | DIVIDE
+
+
+Terminais, com as regras onde eles aparecem
+
+    $end (0) 0
+    error (256)
+    MAIS <cadeia> (258) 22
+    MENOS <cadeia> (259) 23
+    VEZES <cadeia> (260) 24
+    DIVIDE <cadeia> (261) 25
+    OU <cadeia> (262)
+    NEGACAO <cadeia> (263)
+    DEF_INT <cadeia> (264) 13
+    DEF_FLOAT <cadeia> (265) 14
+    DEF_CHAR <cadeia> (266) 15
+    DEF_STRING <cadeia> (267) 16
+    MAISMAIS <cadeia> (268)
+    MENOSMENOS <cadeia> (269)
+    VIRGULA <cadeia> (270)
+    DOISPONTOS <cadeia> (271)
+    PONTOVIRGULA <cadeia> (272) 19
+    ASPASIMPLES <cadeia> (273)
+    ABREPARENTESE <cadeia> (274) 20
+    FECHAPARENTESE <cadeia> (275) 21
+    ABRECOLCHETE <cadeia> (276)
+    FECHACOLCHETE <cadeia> (277)
+    ABRECHAVE <cadeia> (278)
+    FECHACHAVE <cadeia> (279)
+    MENOR <cadeia> (280)
+    MAIOR <cadeia> (281)
+    IGUAL <cadeia> (282)
+    MENORIGUAL <cadeia> (283)
+    MAIORIGUAL <cadeia> (284)
+    IGUALIGUAL <cadeia> (285)
+    ECOMERCIAL <cadeia> (286)
+    DIFERENTE <cadeia> (287)
+    PORCENTO <cadeia> (288)
+    SUSTENIDO <cadeia> (289)
+    TABULACAO <cadeia> (290)
+    ASPADUPLA <cadeia> (291)
+    VERDADEIRO <cadeia> (292)
+    FALSO <cadeia> (293)
+    SE <cadeia> (294)
+    ENTAO <cadeia> (295)
+    SENAO <cadeia> (296)
+    ENQUANTO <cadeia> (297)
+    FAZ <cadeia> (298)
+    PARA <cadeia> (299)
+    INICIA <cadeia> (300)
+    TERMINA <cadeia> (301)
+    DEFINE <cadeia> (302)
+    PRINCIPAL <cadeia> (303)
+    RETORNA <cadeia> (304)
+    INCLUE <cadeia> (305)
+    IMPRIME <cadeia> (306)
+    INTEIRO <cadeia> (307)
+    QUEBRADO <cadeia> (308)
+    EXPOENTE <cadeia> (309)
+    IDENTIFICADOR <cadeia> (310)
+    PALAVRA <cadeia> (311) 17
+    LETRA <cadeia> (312) 18
+    FRASE <cadeia> (313)
+    ESPECIAL <cadeia> (314)
+
+
+Não terminais com as regras onde eles aparecem
+
+    $accept (60)
+        à esquerda: 0
+    code <no> (61)
+        à esquerda: 1 2
+        à direita: 0
+    declaracoes <no> (62)
+        à esquerda: 3 4
+        à direita: 1 4
+    declaracao <no> (63)
+        à esquerda: 5
+        à direita: 3 4
+    acoes <no> (64)
+        à esquerda: 6 7
+        à direita: 1 2 7
+    acao <no> (65)
+        à esquerda: 8
+        à direita: 6 7
+    expressoes <no> (66)
+        à esquerda: 9 10 11
+        à direita: 8 10
+    expressao <no> (67)
+        à esquerda: 12
+        à direita: 9 10 11
+    tipo <no> (68)
+        à esquerda: 13 14 15 16
+        à direita: 5
+    id <no> (69)
+        à esquerda: 17 18
+        à direita: 5 12
+    pontuacao <no> (70)
+        à esquerda: 19 20 21
+        à direita: 5 11
+    operador <no> (71)
+        à esquerda: 22 23 24 25
+        à direita: 12
+
+
+Estado 0
+
+    0 $accept: . code $end
+
+    DEF_INT         deslocar, e ir ao estado 1
+    DEF_FLOAT       deslocar, e ir ao estado 2
+    DEF_CHAR        deslocar, e ir ao estado 3
+    DEF_STRING      deslocar, e ir ao estado 4
+    PONTOVIRGULA    deslocar, e ir ao estado 5
+    ABREPARENTESE   deslocar, e ir ao estado 6
+    FECHAPARENTESE  deslocar, e ir ao estado 7
+    PALAVRA         deslocar, e ir ao estado 8
+    LETRA           deslocar, e ir ao estado 9
+
+    code         ir ao estado 10
+    declaracoes  ir ao estado 11
+    declaracao   ir ao estado 12
+    acoes        ir ao estado 13
+    acao         ir ao estado 14
+    expressoes   ir ao estado 15
+    expressao    ir ao estado 16
+    tipo         ir ao estado 17
+    id           ir ao estado 18
+    pontuacao    ir ao estado 19
+
+
+Estado 1
+
+   13 tipo: DEF_INT .
+
+    $padrão  reduzir usando a regra 13 (tipo)
+
+
+Estado 2
+
+   14 tipo: DEF_FLOAT .
+
+    $padrão  reduzir usando a regra 14 (tipo)
+
+
+Estado 3
+
+   15 tipo: DEF_CHAR .
+
+    $padrão  reduzir usando a regra 15 (tipo)
+
+
+Estado 4
+
+   16 tipo: DEF_STRING .
+
+    $padrão  reduzir usando a regra 16 (tipo)
+
+
+Estado 5
+
+   19 pontuacao: PONTOVIRGULA .
+
+    $padrão  reduzir usando a regra 19 (pontuacao)
+
+
+Estado 6
+
+   20 pontuacao: ABREPARENTESE .
+
+    $padrão  reduzir usando a regra 20 (pontuacao)
+
+
+Estado 7
+
+   21 pontuacao: FECHAPARENTESE .
+
+    $padrão  reduzir usando a regra 21 (pontuacao)
+
+
+Estado 8
+
+   17 id: PALAVRA .
+
+    $padrão  reduzir usando a regra 17 (id)
+
+
+Estado 9
+
+   18 id: LETRA .
+
+    $padrão  reduzir usando a regra 18 (id)
+
+
+Estado 10
+
+    0 $accept: code . $end
+
+    $end  deslocar, e ir ao estado 20
+
+
+Estado 11
+
+    1 code: declaracoes . acoes
+    4 declaracoes: declaracoes . declaracao
+
+    DEF_INT         deslocar, e ir ao estado 1
+    DEF_FLOAT       deslocar, e ir ao estado 2
+    DEF_CHAR        deslocar, e ir ao estado 3
+    DEF_STRING      deslocar, e ir ao estado 4
+    PONTOVIRGULA    deslocar, e ir ao estado 5
+    ABREPARENTESE   deslocar, e ir ao estado 6
+    FECHAPARENTESE  deslocar, e ir ao estado 7
+    PALAVRA         deslocar, e ir ao estado 8
+    LETRA           deslocar, e ir ao estado 9
+
+    declaracao  ir ao estado 21
+    acoes       ir ao estado 22
+    acao        ir ao estado 14
+    expressoes  ir ao estado 15
+    expressao   ir ao estado 16
+    tipo        ir ao estado 17
+    id          ir ao estado 18
+    pontuacao   ir ao estado 19
+
+
+Estado 12
+
+    3 declaracoes: declaracao .
+
+    $padrão  reduzir usando a regra 3 (declaracoes)
+
+
+Estado 13
+
+    2 code: acoes .
+    7 acoes: acoes . acao
+
+    PONTOVIRGULA    deslocar, e ir ao estado 5
+    ABREPARENTESE   deslocar, e ir ao estado 6
+    FECHAPARENTESE  deslocar, e ir ao estado 7
+    PALAVRA         deslocar, e ir ao estado 8
+    LETRA           deslocar, e ir ao estado 9
+
+    $padrão  reduzir usando a regra 2 (code)
+
+    acao        ir ao estado 23
+    expressoes  ir ao estado 15
+    expressao   ir ao estado 16
+    id          ir ao estado 18
+    pontuacao   ir ao estado 19
+
+
+Estado 14
+
+    6 acoes: acao .
+
+    $padrão  reduzir usando a regra 6 (acoes)
+
+
+Estado 15
+
+    8 acao: expressoes .
+   10 expressoes: expressoes . expressao
+
+    PALAVRA  deslocar, e ir ao estado 8
+    LETRA    deslocar, e ir ao estado 9
+
+    PALAVRA   [reduzir usando a regra 8 (acao)]
+    LETRA     [reduzir usando a regra 8 (acao)]
+    $padrão  reduzir usando a regra 8 (acao)
+
+    expressao  ir ao estado 24
+    id         ir ao estado 18
+
+
+Estado 16
+
+    9 expressoes: expressao .
+
+    $padrão  reduzir usando a regra 9 (expressoes)
+
+
+Estado 17
+
+    5 declaracao: tipo . id pontuacao
+
+    PALAVRA  deslocar, e ir ao estado 8
+    LETRA    deslocar, e ir ao estado 9
+
+    id  ir ao estado 25
+
+
+Estado 18
+
+   12 expressao: id . operador id
+
+    MAIS    deslocar, e ir ao estado 26
+    MENOS   deslocar, e ir ao estado 27
+    VEZES   deslocar, e ir ao estado 28
+    DIVIDE  deslocar, e ir ao estado 29
+
+    operador  ir ao estado 30
+
+
+Estado 19
+
+   11 expressoes: pontuacao . expressao pontuacao
+
+    PALAVRA  deslocar, e ir ao estado 8
+    LETRA    deslocar, e ir ao estado 9
+
+    expressao  ir ao estado 31
+    id         ir ao estado 18
+
+
+Estado 20
+
+    0 $accept: code $end .
+
+    $padrão  aceitar
+
+
+Estado 21
+
+    4 declaracoes: declaracoes declaracao .
+
+    $padrão  reduzir usando a regra 4 (declaracoes)
+
+
+Estado 22
+
+    1 code: declaracoes acoes .
+    7 acoes: acoes . acao
+
+    PONTOVIRGULA    deslocar, e ir ao estado 5
+    ABREPARENTESE   deslocar, e ir ao estado 6
+    FECHAPARENTESE  deslocar, e ir ao estado 7
+    PALAVRA         deslocar, e ir ao estado 8
+    LETRA           deslocar, e ir ao estado 9
+
+    $padrão  reduzir usando a regra 1 (code)
+
+    acao        ir ao estado 23
+    expressoes  ir ao estado 15
+    expressao   ir ao estado 16
+    id          ir ao estado 18
+    pontuacao   ir ao estado 19
+
+
+Estado 23
+
+    7 acoes: acoes acao .
+
+    $padrão  reduzir usando a regra 7 (acoes)
+
+
+Estado 24
+
+   10 expressoes: expressoes expressao .
+
+    $padrão  reduzir usando a regra 10 (expressoes)
+
+
+Estado 25
+
+    5 declaracao: tipo id . pontuacao
+
+    PONTOVIRGULA    deslocar, e ir ao estado 5
+    ABREPARENTESE   deslocar, e ir ao estado 6
+    FECHAPARENTESE  deslocar, e ir ao estado 7
+
+    pontuacao  ir ao estado 32
+
+
+Estado 26
+
+   22 operador: MAIS .
+
+    $padrão  reduzir usando a regra 22 (operador)
+
+
+Estado 27
+
+   23 operador: MENOS .
+
+    $padrão  reduzir usando a regra 23 (operador)
+
+
+Estado 28
+
+   24 operador: VEZES .
+
+    $padrão  reduzir usando a regra 24 (operador)
+
+
+Estado 29
+
+   25 operador: DIVIDE .
+
+    $padrão  reduzir usando a regra 25 (operador)
+
+
+Estado 30
+
+   12 expressao: id operador . id
+
+    PALAVRA  deslocar, e ir ao estado 8
+    LETRA    deslocar, e ir ao estado 9
+
+    id  ir ao estado 33
+
+
+Estado 31
+
+   11 expressoes: pontuacao expressao . pontuacao
+
+    PONTOVIRGULA    deslocar, e ir ao estado 5
+    ABREPARENTESE   deslocar, e ir ao estado 6
+    FECHAPARENTESE  deslocar, e ir ao estado 7
+
+    pontuacao  ir ao estado 34
+
+
+Estado 32
+
+    5 declaracao: tipo id pontuacao .
+
+    $padrão  reduzir usando a regra 5 (declaracao)
+
+
+Estado 33
+
+   12 expressao: id operador id .
+
+    $padrão  reduzir usando a regra 12 (expressao)
+
+
+Estado 34
+
+   11 expressoes: pontuacao expressao pontuacao .
+
+    $padrão  reduzir usando a regra 11 (expressoes)
