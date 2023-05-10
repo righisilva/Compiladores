@@ -27,3 +27,11 @@ yacc -d nico.y && flex analisador.l && gcc -c lex.yy.c y.tab.c && gcc -o parser 
 
 yacc -d nico.y && flex analisador.l && gcc -c lex.yy.c y.tab.c main.c node.c && gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
 
+
+
+
+git add .
+git commit -m “comentários”
+git push
+
+
