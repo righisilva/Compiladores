@@ -99,14 +99,34 @@
 %type<no> declaracoes
 %type<no> declaracao
 %type<no> tipo
-%type<no> expressoes
-%type<no> expressao
+%type<no> aritmeticas
+%type<no> aritmetica
 %type<no> operador
 %type<no> id
 %type<no> pontuacao
 %type<no> igualdade
 %type<no> valor
 %type<no> define
+%type<no> abrep
+%type<no> fechap
+%type<no> ini
+%type<no> term
+%type<no> princ
+%type<no> seentao
+%type<no> se
+%type<no> entao
+%type<no> senao
+%type<no> logicos
+%type<no> logico
+%type<no> operadorlog
+%type<no> imprimir
+%type<no> imprime
+%type<no> frase
+%type<no> para
+%type<no> fazpara
+%type<no> enquanto
+%type<no> faz
+%type<no> enq
 
 
 /* demais types ... */
@@ -133,21 +153,58 @@ declaracoes: declaracao {$$ = create_node(@1.first_line, declaracoes_node, NULL,
 
 declaracao:  tipo id igualdade valor pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, $4, $5, NULL);}
            | define id valor {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, NULL);}
+           | ini princ abrep fechap code term  {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, $4, $5, $6,NULL);}
              ;
 
 acoes:     acao {$$ = create_node(@1.first_line, acoes_node, NULL, $1, NULL);}
          | acoes acao {$$ = create_node(@1.first_line, acoes_node, NULL, $1, $2, NULL);}
          ;
 
-acao:      expressoes {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+acao:      aritmeticas {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+          | seentao {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+          | fazpara {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+          | enquanto {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+          | imprimir  {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
          ;
 
-expressoes: expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
-          | expressoes expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
-          | pontuacao expressao pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+aritmeticas: aritmetica {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+          |  aritmetica pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
+          | aritmeticas aritmetica {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
+          | abrep aritmeticas fechap {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
           ;
 
-expressao: id operador id {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+aritmetica: id operador id {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+        |  id operador operador {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+         ;
+
+seentao: ini se abrep logicos fechap entao code senao code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8, $9, $10,NULL);}
+       | ini se abrep logicos fechap entao code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8,NULL);}
+       ;
+
+fazpara:  ini para abrep declaracoes logicos pontuacao aritmeticas fechap code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8, $9, $10, NULL);}
+        ;
+
+enquanto:  ini enq abrep logicos fechap faz code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7,$8, NULL);}
+        ;
+
+logicos : logico {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+          | logicos logico {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
+          | abrep logicos fechap {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+          ;
+
+logico : id operadorlog id {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+         ;
+
+imprimir: imprime frase pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+         ;
+
+se:  SE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+         ;
+
+entao:  ENTAO {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+         ;
+
+senao:  SENAO {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
          ;
 
 define:  DEFINE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
@@ -169,9 +226,13 @@ valor:     INTEIRO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, N
          ;
 
 pontuacao: PONTOVIRGULA {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
-         | ABREPARENTESE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
-         | FECHAPARENTESE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
          ;
+
+abrep:    ABREPARENTESE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+        ;
+
+fechap:    FECHAPARENTESE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+        ;
 
 igualdade: IGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
            ;
@@ -181,5 +242,48 @@ operador:  MAIS {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL)
          | VEZES {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          | DIVIDE {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          ;
+
+operadorlog:  MENOR {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | MAIOR {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | IGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | MENORIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | MAIORIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | IGUALIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | ECOMERCIAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | MENORIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | DIFERENTE {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | NEGACAO {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         | OU {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+         ;
+
+ini: INICIA {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+term: TERMINA {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+princ: PRINCIPAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+imprime: IMPRIME {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+frase: FRASE {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+
+para: PARA {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+
+faz: FAZ {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+enq: ENQUANTO {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+           ;
+
+
+
+
 
 %%

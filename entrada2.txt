@@ -10,12 +10,12 @@ inicia principal ()
         imprime "x eh maior que var";
     termina
     
-    inicia para (inteiro z = 0; z <= var; z+-)
+    inicia para (inteiro z = 0; z <= var; z++)
         imprime "z";
     termina
     
     inicia enquanto (x != var) faz
-        x-+;
+        x--;
     termina
      
 termina    
