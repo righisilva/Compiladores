@@ -27,18 +27,23 @@ int main(int argc, char* argv[])
 
 	progname = argv[0];
 
-	int result = yyparse();
 
-	if(argc == 3){ //testing
-		// uncompile(stdout, syntax_tree);
-		uncompile(syntax_tree);
-	} else
-	{
-		if(!result)
-			printf("OKAY.\n");
-		else
-			printf("ERROR. %d\n", result);
+
+	int result = yyparse();
+	FILE* saida = fopen("uncompile.txt", "w");
+	if (saida != NULL){
+    	uncompile2(saida, syntax_tree);
+    	fclose(saida);
+    	printf("Uncompile salvo no arquivo uncompile.txt.\n\n");
+	}else {
+    	printf("Erro ao abrir o arquivo de saída.\n");
 	}
+
+	if(!result)
+		printf("OKAY.\n");
+	else
+		printf("ERROR. %d\n", result);
+
 	uncompile(syntax_tree);
 
 	return 0;

@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 		if(!result)
 			printf("OKAY.\n");
 		else
-			printf("ERROR.\n");
+			printf("ERROR. %d\n", result);
 	}
 	uncompile(syntax_tree);
 

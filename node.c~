@@ -24,7 +24,7 @@ Node* create_node(int nl, Node_type t, char* lexeme,  /* Node* children */ ...)
     for (; arg != NULL; arg = va_arg(ap, const struct _node*)){
         n_args ++;
     }
-    // printf ("%d %s\n", n_args, new_node->lexeme);
+    printf ("%d %s\n", n_args, new_node->lexeme);
     new_node->n_child = n_args;
     //aloquei
     new_node->children = calloc(n_args, sizeof(struct _node*));
@@ -34,7 +34,7 @@ Node* create_node(int nl, Node_type t, char* lexeme,  /* Node* children */ ...)
     n_args = 0;
     for (arg = va_arg(ap, const struct _node*); arg != NULL; arg = va_arg(ap, const struct _node*)){
         new_node->children[n_args] = (struct _node*) arg;
-        // printf("%d\n", n_args);
+        printf("%d\n", n_args);
         n_args ++;
     }
 
@@ -95,16 +95,11 @@ int height(Node* n)
     return h + 1;
 }
 
-void uncompile2(FILE* outfile, Node *n){
-    if (n == NULL) {
-        return;
-    }
-    if (n->lexeme != NULL){
-        fprintf(outfile, "%s\n", n->lexeme);
-    }
-
-    for (int i = 0; i < n->n_child; i++) {
-        uncompile2(outfile, n->children[i]);
+void uncompile2(FILE* outfile, Node *n)
+{
+    if(n != NULL)
+    {
+        //Code ...
     }
 }
 

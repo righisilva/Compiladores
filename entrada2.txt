@@ -18,4 +18,4 @@ inicia principal ()
         x--;
     termina
      
-termina    
+termina

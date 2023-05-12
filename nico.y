@@ -130,6 +130,7 @@
 %type<no> mmais
 %type<no> mmenos
 %type<no> incdec
+%type<no> nao_faz_nada
 
 
 /* demais types ... */
@@ -205,6 +206,9 @@ incdec: id mmais {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL)
         | id mmenos {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
          ;
 
+nao_faz_nada: {}; // Declaração da instrução "nao_faz_nada"
+
+
 se:  SE {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
          ;
 
@@ -263,7 +267,6 @@ operadorlog:  MENOR {$$ = create_node(@1.first_line, code_node, yylval.cadeia, N
          | MAIORIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          | IGUALIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          | ECOMERCIAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
-         | MENORIGUAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          | DIFERENTE {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          | NEGACAO {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
          | OU {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
