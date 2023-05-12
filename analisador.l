@@ -28,7 +28,7 @@ especial    [ -~]
 caracter    [a-zA-Z_]
 palavra     {caracter}({caracter}|{digito})*
 frase       "\""{especial}+"\""
-
+comentario  "\\"{especial}+
 
 
 %%
@@ -80,7 +80,7 @@ palavra      {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); st
 "define"     {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (DEFINE);}
 "principal"  {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (PRINCIPAL);}
 "retorna"    {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (RETORNA);}
-"inclue"     {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (INCLUE);}
+"inclue"     {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (INCLUI);}
 "imprime"    {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (IMPRIME);}
 {numeral}    {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (INTEIRO);}
 {fracao}     {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (QUEBRADO);}
@@ -88,6 +88,7 @@ palavra      {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); st
 {caracter}   {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (IDENTIFICADOR);}
 {palavra}    {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (IDENTIFICADOR);}
 {frase}      {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (FRASE);}
+{comentario} {}
 {especial}   {yylval.cadeia = (char*)malloc((strlen(yytext)+1)*sizeof(char)); strcpy(yylval.cadeia, yytext); return (ESPECIAL);}
 
 

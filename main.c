@@ -34,17 +34,17 @@ int main(int argc, char* argv[])
 	if (saida != NULL){
     	uncompile2(saida, syntax_tree);
     	fclose(saida);
-    	printf("Uncompile salvo no arquivo uncompile.txt.\n\n");
+    	printf("\nUncompile salvo no arquivo uncompile.txt.\n\n");
 	}else {
     	printf("Erro ao abrir o arquivo de saída.\n");
 	}
 
 	if(!result)
-		printf("OKAY.\n");
+		printf("OKAY. :)\n\n");
 	else
 		printf("ERROR. %d\n", result);
 
-	uncompile(syntax_tree);
+	// uncompile(syntax_tree);
 
 	return 0;
 }

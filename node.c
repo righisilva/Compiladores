@@ -24,7 +24,11 @@ Node* create_node(int nl, Node_type t, char* lexeme,  /* Node* children */ ...)
     for (; arg != NULL; arg = va_arg(ap, const struct _node*)){
         n_args ++;
     }
-    // printf ("%d %s\n", n_args, new_node->lexeme);
+    
+    if (new_node->lexeme != NULL){
+        printf ("Leu: %s\n", new_node->lexeme);
+    }
+    
     new_node->n_child = n_args;
     //aloquei
     new_node->children = calloc(n_args, sizeof(struct _node*));
