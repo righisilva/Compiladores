@@ -8,33 +8,15 @@ COMANDOS PARA COMPILAR:
     flex analisador.l
     gcc -c lex.yy.c y.tab.c main.c node.c
     gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+    
 OU:
+
     yacc -d nico.y && flex analisador.l && gcc -c lex.yy.c y.tab.c main.c node.c && gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+    
 OU:
+
     make
 
 COMANDOS PARA EXECUTAR:
     ./parser entrada.txt 
-
-
-yacc -d nico.y
-flex analisador.l
-gcc -c lex.yy.c y.tab.c main.c node.c
-gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
-
-
-
-
-
-
-
-
-
-git add .   
-git commit -m “sextaNoite”
-git push
-
-
-
-git pull
 
