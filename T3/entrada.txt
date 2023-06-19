@@ -1,0 +1,31 @@
+define var 5
+define teste 6
+
+inicia principal () 
+    inteiro x = 12;
+    quebrado y = 1,25;
+    inteiro z;
+    quebrado j = x + y;
+    
+\\comentarios quaisquer ate quebra de linha
+
+    inicia se (x < var) entao
+        imprime "x eh menor que var";
+        senao
+        imprime "x eh maior que var";
+    termina
+    
+    inicia para (inteiro z = 0; z <= var; z++)
+        imprime "z";
+    termina
+        z = funcaoUm ();
+        z = x + 10,5*2/z;
+    inicia enquanto (x != var) faz
+        x--;
+    termina
+
+termina
+
+inicia funcaoUm (inteiro a; quebrado b)
+    imprime "a";
+termina             

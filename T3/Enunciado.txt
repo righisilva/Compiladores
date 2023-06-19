@@ -1,0 +1,16 @@
+1 - criar variavel global que conte o armazenamento
+2 - gerar stack pointer. E numerar as instruções
+ - gerar variavel global para incrementar registrador
+ 
+ 
+ 
+ 
+ lista encadeada de instruções
+ append insit tac concatena os int   variavel ...
+ 
+ insert (table , INT_LIT)
+ usar outra variavel global para dizer se é int, float....
+ 
+ 
+ 
+ apend

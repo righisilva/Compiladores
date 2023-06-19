@@ -1,0 +1,22 @@
+Aluno: Fábio Righi da Silva
+Matrícula: 1602020028
+
+
+COMANDOS PARA COMPILAR:
+
+    yacc -d nico.y
+    flex analisador.l
+    gcc -c lex.yy.c y.tab.c main.c node.c
+    gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+    
+OU:
+
+    yacc -d nico.y && flex analisador.l && gcc -c lex.yy.c y.tab.c main.c node.c && gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+    
+OU:
+
+    make
+
+COMANDOS PARA EXECUTAR:
+    ./parser entrada.txt 
+
