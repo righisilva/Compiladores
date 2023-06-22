@@ -7,6 +7,8 @@
  */
 
 #include "symbol_table.h"
+#include <string.h>
+
 #define EOS '\0'
 
 int hashpjw(s)

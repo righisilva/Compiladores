@@ -9,14 +9,18 @@
 	#include <stdlib.h>
 	#include "node.h"
     #include "symbol_table.h"
-
+    
+    symbol_t symbol_table; // Declare a tabela de símbolos
     int tipo = 0; //int = 1, float = 2, char = 3, string = 4
+    int tamanho = 4;    /**< numero de Bytes necessarios para armazenamento. */
+    int desloc = 0;  /**< Endereco da proxima variavel. */
 /*    extern int yyparse();*/
 
 	extern int yyerror(const char* msg );
 	extern int yylex();
 
 	extern Node *syntax_tree;
+	
 
 %}
 
@@ -25,6 +29,8 @@
 	char *cadeia;
 	struct _node *no;
 };
+
+
 
 %left MAIS MENOS
 %left VEZES DIVIDE
@@ -150,8 +156,8 @@
 
 %%
 
-inicio:      cabecalhos code {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL); syntax_tree = $$;}
-           | code {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL); syntax_tree = $$;}
+inicio:      cabecalhos code {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL); syntax_tree = $$; init_table(&symbol_table);}
+           | code {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL); syntax_tree = $$; init_table(&symbol_table);}
            ;
 
 cabecalhos:  cabecalho {$$ = create_node(@1.first_line, declaracoes_node, NULL, $1, NULL);}
@@ -280,7 +286,17 @@ tipo:        DEF_INT {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, 
            | DEF_STRING {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            ;
 
-id:          IDENTIFICADOR  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+id:          IDENTIFICADOR  {
+                entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
+                new_entry->name = yylval.cadeia;
+                new_entry->type = tipo;
+                new_entry->size = tamanho;
+                new_entry->desloc = desloc;
+                new_entry->extra = NULL;
+                insert(&symbol_table, new_entry);
+                desloc += tamanho;
+                print_table(symbol_table);
+                $$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            ;
 
 valor:       INTEIRO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); tipo = 1;}
