@@ -2122,7 +2122,7 @@ yyreduce:
                 new_entry->extra = NULL;
                 insert(&symbol_table, new_entry);
                 desloc += tamanho;
-                
+                print_table(symbol_table);
                 (yyval.no) = create_node((yylsp[0]).first_line, tipo_node, yylval.cadeia, NULL);}
 #line 2128 "y.tab.c"
     break;
@@ -2578,5 +2578,3 @@ yyreturn:
 }
 #line 375 "nico.y"
 
-
-print_table(symbol_table);
