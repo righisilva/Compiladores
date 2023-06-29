@@ -9,31 +9,18 @@
 	#include <stdlib.h>
 	#include "node.h"
     #include "symbol_table.h"
-    #include "lista.h"
-
-
-    // extern int temps_size;
-
-    char *gera_temp (int type){
-        int size = 4;
-        char *ret = malloc(sizeof(char)*8);
-        sprintf(ret, "%03d(Rx)", temps_size);
-        temps_size += size;
-        return ret;
-    }
 
     symbol_t symbol_table; // Declare a tabela de símbolos
     int tipo = 0; //int = 1, float = 2, char = 3, string = 4
     int tamanho = 4;    /**< numero de Bytes necessarios para armazenamento. */
     int desloc = 0;  /**< Endereco da proxima variavel. */
-
-
 /*    extern int yyparse();*/
 
 	extern int yyerror(const char* msg );
 	extern int yylex();
 
 	extern Node *syntax_tree;
+
 
 %}
 
@@ -42,6 +29,8 @@
 	char *cadeia;
 	struct _node *no;
 };
+
+
 
 %left MAIS MENOS
 %left VEZES DIVIDE
@@ -120,8 +109,6 @@
 %type<no> declaracoes
 %type<no> declaracao
 %type<no> tipo
-%type<no> aritmeticas
-%type<no> aritmetica
 %type<no> operador
 %type<no> id
 %type<no> pontuacao
@@ -159,7 +146,9 @@
 %type<no> funcao
 %type<no> num
 %type<no> operando
-%type<no> expressao
+%type<no> s
+%type<no> t
+%type<no> f
 
 
  %start inicio
@@ -169,7 +158,7 @@
 
 inicio:      cabecalhos code {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL); syntax_tree = $$; init_table(&symbol_table);}
            | code {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL); syntax_tree = $$; init_table(&symbol_table);}
-    ;
+           ;
 
 cabecalhos:  cabecalho {$$ = create_node(@1.first_line, declaracoes_node, NULL, $1, NULL);}
            | cabecalhos cabecalho {$$ = create_node(@1.first_line, declaracoes_node, NULL, $1, $2, NULL);}
@@ -205,19 +194,21 @@ parametro:   tipo id {$$ = create_node(@1.first_line, declaracao_node, NULL, $1,
            | tipo id pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);}
            ;
 
-atribuicao:  igualdade expressao pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);}
+atribuicao:  igualdade valor pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2,  NULL);}
+           | igualdade s {$$ = create_node(@1.first_line, code_node, NULL, $1, $2,  NULL);}
            | igualdade funcao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2,  NULL);}
            ;
 
-atr_oper:    id igualdade aritmeticas pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4,  NULL);}
-           | id igualdade funcao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3,  NULL);}
+atr_oper:    id igualdade s {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3,  NULL);}
+           | id igualdade funcao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);}
            ;
 
 acoes:       acao {$$ = create_node(@1.first_line, acoes_node, NULL, $1, NULL);}
            | acoes acao {$$ = create_node(@1.first_line, acoes_node, NULL, $1, $2, NULL);}
            ;
 
-acao:        aritmeticas {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+acao:        s {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
+           | incdec {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
            | seentao {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
            | fazpara {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
            | enquanto {$$ = create_node(@1.first_line, acao_node, NULL, $1, NULL);}
@@ -230,64 +221,30 @@ funcao:      id abrep fechap pontuacao {$$ = create_node(@1.first_line, acao_nod
            | id abrep parametros fechap pontuacao {$$ = create_node(@1.first_line, acao_node, NULL, $1, $2, $3, $4, $5, NULL);}
            ;
 
-expressao:   valor {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
-           | aritmetica {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+
+s:           t {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+           | t pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
            ;
 
-aritmeticas: expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
-           | aritmeticas operador expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+t:           f {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+           | t operador f {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
            ;
 
-aritmetica:  operando operador operando {$$ = create_node(@1.first_line, code_node, gera_temp(tipo), $1, $2, $3, NULL); printf("\n%s %s %s \n\n", $1->lexeme, $2->lexeme, $3->lexeme);
-                struct tac* new_tac = create_inst_tac ($$->lexeme, $1->lexeme, $2->lexeme, $3->lexeme);
-               $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
-               $1->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
-               $3->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
-                cat_tac(&($$->attribute->code), &($1->attribute->code));
-                cat_tac(&($$->attribute->code), &($3->attribute->code));
-                append_inst_tac(&($$->attribute->code), new_tac);
-
-
-                FILE* file = fopen("teste.txt", "a");
-                if (file == NULL) {
-                    printf("Erro ao abrir o arquivo.\n");
-                    exit(1);
-                }
-                print_tac(file, $$->attribute->code);
-                fclose(file);
-            }
-           | incdec {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
-           | incdec pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
+f:           operando  {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+           | abrep t fechap {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
+           | incdec {$$ = create_node(@1.first_line, code_node, NULL, $1,  NULL);}
            ;
 
 
-id:          IDENTIFICADOR  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);
-                entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
-                new_entry->name = yylval.cadeia;
-                new_entry->type = tipo;
-                new_entry->size = tamanho;
-                new_entry->desloc = desloc;
-                new_entry->extra = NULL;
-                insert(&symbol_table, new_entry);
-                desloc += tamanho;
-                // print_table(symbol_table);
-                // struct node_tac* code = (node_tac*)malloc(sizeof(node_tac));
-                // EXPR_ATTR* expr_attr = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
-                // expr_attr->code = (struct node_tac*) malloc(sizeof(struct node_tac));
-                // expr_attr->code->inst = create_inst_tac ($$->lexeme, $$->lexeme, $$->lexeme, $$->lexeme);
-                // $$->attribute = expr_attr;
-            }
-           ;
-
-operando:    id {$$ = create_node(@1.first_line, code_node, $1->lexeme, $1, NULL);}
-           | num {$$ = create_node(@1.first_line, code_node, $1->lexeme, $1, NULL);}
+operando:    id {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+           | num {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
            ;
 
 seentao:     ini se abrep logicos fechap entao code senao code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8, $9, $10,NULL);}
            | ini se abrep logicos fechap entao code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8,NULL);}
            ;
 
-fazpara:     ini para abrep declaracoes logicos pontuacao aritmeticas fechap code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8, $9, $10, NULL);}
+fazpara:     ini para abrep declaracoes logicos pontuacao s fechap code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7, $8, $9, $10, NULL);}
            ;
 
 enquanto:    ini enq abrep logicos fechap faz code term {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4, $5, $6,$7,$8, NULL);}
@@ -306,6 +263,7 @@ imprimir:    imprime frase pontuacao {$$ = create_node(@1.first_line, code_node,
 
 incdec:      id mmais {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
            | id mmenos {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
+           | incdec pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
            ;
 
 
@@ -328,11 +286,23 @@ tipo:        DEF_INT {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, 
            | DEF_STRING {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); tipo = 4;}
            ;
 
+id:          IDENTIFICADOR  {
+                entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
+                new_entry->name = yylval.cadeia;
+                new_entry->type = tipo;
+                new_entry->size = tamanho;
+                new_entry->desloc = desloc;
+                new_entry->extra = NULL;
+                insert(&symbol_table, new_entry);
+                desloc += tamanho;
+                print_table(symbol_table);
+                $$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+           ;
 
 valor:       INTEIRO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            | QUEBRADO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
-           | FRASE  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            | LETRA  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+           | FRASE  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            ;
 
 pontuacao:   PONTOVIRGULA {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}

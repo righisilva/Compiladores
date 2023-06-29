@@ -92,13 +92,18 @@ typedef int Node_type;
 #define diferentelex_node 563
 
 
+typedef struct expr_attr{
+            struct node_tac *code;
+            char *local;
+            int size;
+    } EXPR_ATTR;
 
 /** Estrutura de dados parcial para o no da arvore. */
 typedef struct _node {
    int line_num;   /**< numero de linha. */
    char* lexeme;   /**< o lexema retornado pelo analizador lexical. */
    Node_type type; /**< Um dos valores definidos acima pelos # defines. */
-   void* attribute;/**< Qualquer coisa por enquanto. */
+   EXPR_ATTR* attribute;/**< Qualquer coisa por enquanto. */
 
    struct _node** children;
    unsigned int n_child;

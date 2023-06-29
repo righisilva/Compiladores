@@ -19,7 +19,8 @@ inicia principal ()
         imprime "z";
     termina
         z = funcaoUm ();
-        z = x + 10,5*2/z;
+        \\z = ((x + 10,5)*2)/z;
+        z = x * 12 / 3;
     inicia enquanto (x != var) faz
         x--;
     termina

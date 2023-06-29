@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,8 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
 #ifndef YY_YY_Y_TAB_H_INCLUDED
 # define YY_YY_Y_TAB_H_INCLUDED
@@ -44,101 +45,110 @@
 extern int yydebug;
 #endif
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef YYTOKENTYPE
 # define YYTOKENTYPE
   enum yytokentype
   {
-    MAIS = 258,
-    MENOS = 259,
-    VEZES = 260,
-    DIVIDE = 261,
-    OU = 262,
-    NEGACAO = 263,
-    DEF_INT = 264,
-    DEF_FLOAT = 265,
-    DEF_CHAR = 266,
-    DEF_STRING = 267,
-    MAISMAIS = 268,
-    MENOSMENOS = 269,
-    VIRGULA = 270,
-    DOISPONTOS = 271,
-    PONTOVIRGULA = 272,
-    ASPASIMPLES = 273,
-    ABREPARENTESE = 274,
-    FECHAPARENTESE = 275,
-    ABRECOLCHETE = 276,
-    FECHACOLCHETE = 277,
-    ABRECHAVE = 278,
-    FECHACHAVE = 279,
-    MENOR = 280,
-    MAIOR = 281,
-    IGUAL = 282,
-    MENORIGUAL = 283,
-    MAIORIGUAL = 284,
-    IGUALIGUAL = 285,
-    ECOMERCIAL = 286,
-    DIFERENTE = 287,
-    PORCENTO = 288,
-    SUSTENIDO = 289,
-    TABULACAO = 290,
-    ASPADUPLA = 291,
-    VERDADEIRO = 292,
-    FALSO = 293,
-    SE = 294,
-    ENTAO = 295,
-    SENAO = 296,
-    ENQUANTO = 297,
-    FAZ = 298,
-    PARA = 299,
-    INICIA = 300,
-    TERMINA = 301,
-    DEFINE = 302,
-    PRINCIPAL = 303,
-    RETORNA = 304,
-    INCLUI = 305,
-    IMPRIME = 306,
-    INTEIRO = 307,
-    QUEBRADO = 308,
-    EXPOENTE = 309,
-    IDENTIFICADOR = 310,
-    PALAVRA = 311,
-    LETRA = 312,
-    FRASE = 313,
-    ESPECIAL = 314
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    DEF_INT = 258,                 /* DEF_INT  */
+    DEF_FLOAT = 259,               /* DEF_FLOAT  */
+    DEF_CHAR = 260,                /* DEF_CHAR  */
+    DEF_STRING = 261,              /* DEF_STRING  */
+    MAIS = 262,                    /* MAIS  */
+    MENOS = 263,                   /* MENOS  */
+    VEZES = 264,                   /* VEZES  */
+    DIVIDE = 265,                  /* DIVIDE  */
+    MAISMAIS = 266,                /* MAISMAIS  */
+    MENOSMENOS = 267,              /* MENOSMENOS  */
+    VIRGULA = 268,                 /* VIRGULA  */
+    DOISPONTOS = 269,              /* DOISPONTOS  */
+    PONTOVIRGULA = 270,            /* PONTOVIRGULA  */
+    ASPASIMPLES = 271,             /* ASPASIMPLES  */
+    ABREPARENTESE = 272,           /* ABREPARENTESE  */
+    FECHAPARENTESE = 273,          /* FECHAPARENTESE  */
+    ABRECOLCHETE = 274,            /* ABRECOLCHETE  */
+    FECHACOLCHETE = 275,           /* FECHACOLCHETE  */
+    ABRECHAVE = 276,               /* ABRECHAVE  */
+    FECHACHAVE = 277,              /* FECHACHAVE  */
+    MENOR = 278,                   /* MENOR  */
+    MAIOR = 279,                   /* MAIOR  */
+    IGUAL = 280,                   /* IGUAL  */
+    MENORIGUAL = 281,              /* MENORIGUAL  */
+    MAIORIGUAL = 282,              /* MAIORIGUAL  */
+    IGUALIGUAL = 283,              /* IGUALIGUAL  */
+    ECOMERCIAL = 284,              /* ECOMERCIAL  */
+    DIFERENTE = 285,               /* DIFERENTE  */
+    NEGACAO = 286,                 /* NEGACAO  */
+    OU = 287,                      /* OU  */
+    PORCENTO = 288,                /* PORCENTO  */
+    SUSTENIDO = 289,               /* SUSTENIDO  */
+    TABULACAO = 290,               /* TABULACAO  */
+    ASPADUPLA = 291,               /* ASPADUPLA  */
+    VERDADEIRO = 292,              /* VERDADEIRO  */
+    FALSO = 293,                   /* FALSO  */
+    SE = 294,                      /* SE  */
+    ENTAO = 295,                   /* ENTAO  */
+    SENAO = 296,                   /* SENAO  */
+    ENQUANTO = 297,                /* ENQUANTO  */
+    FAZ = 298,                     /* FAZ  */
+    PARA = 299,                    /* PARA  */
+    INICIA = 300,                  /* INICIA  */
+    TERMINA = 301,                 /* TERMINA  */
+    DEFINE = 302,                  /* DEFINE  */
+    PRINCIPAL = 303,               /* PRINCIPAL  */
+    RETORNA = 304,                 /* RETORNA  */
+    INCLUI = 305,                  /* INCLUI  */
+    IMPRIME = 306,                 /* IMPRIME  */
+    INTEIRO = 307,                 /* INTEIRO  */
+    QUEBRADO = 308,                /* QUEBRADO  */
+    EXPOENTE = 309,                /* EXPOENTE  */
+    IDENTIFICADOR = 310,           /* IDENTIFICADOR  */
+    PALAVRA = 311,                 /* PALAVRA  */
+    LETRA = 312,                   /* LETRA  */
+    FRASE = 313,                   /* FRASE  */
+    ESPECIAL = 314                 /* ESPECIAL  */
   };
+  typedef enum yytokentype yytoken_kind_t;
 #endif
-/* Tokens.  */
-#define MAIS 258
-#define MENOS 259
-#define VEZES 260
-#define DIVIDE 261
-#define OU 262
-#define NEGACAO 263
-#define DEF_INT 264
-#define DEF_FLOAT 265
-#define DEF_CHAR 266
-#define DEF_STRING 267
-#define MAISMAIS 268
-#define MENOSMENOS 269
-#define VIRGULA 270
-#define DOISPONTOS 271
-#define PONTOVIRGULA 272
-#define ASPASIMPLES 273
-#define ABREPARENTESE 274
-#define FECHAPARENTESE 275
-#define ABRECOLCHETE 276
-#define FECHACOLCHETE 277
-#define ABRECHAVE 278
-#define FECHACHAVE 279
-#define MENOR 280
-#define MAIOR 281
-#define IGUAL 282
-#define MENORIGUAL 283
-#define MAIORIGUAL 284
-#define IGUALIGUAL 285
-#define ECOMERCIAL 286
-#define DIFERENTE 287
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
+#define DEF_INT 258
+#define DEF_FLOAT 259
+#define DEF_CHAR 260
+#define DEF_STRING 261
+#define MAIS 262
+#define MENOS 263
+#define VEZES 264
+#define DIVIDE 265
+#define MAISMAIS 266
+#define MENOSMENOS 267
+#define VIRGULA 268
+#define DOISPONTOS 269
+#define PONTOVIRGULA 270
+#define ASPASIMPLES 271
+#define ABREPARENTESE 272
+#define FECHAPARENTESE 273
+#define ABRECOLCHETE 274
+#define FECHACOLCHETE 275
+#define ABRECHAVE 276
+#define FECHACHAVE 277
+#define MENOR 278
+#define MAIOR 279
+#define IGUAL 280
+#define MENORIGUAL 281
+#define MAIORIGUAL 282
+#define IGUALIGUAL 283
+#define ECOMERCIAL 284
+#define DIFERENTE 285
+#define NEGACAO 286
+#define OU 287
 #define PORCENTO 288
 #define SUSTENIDO 289
 #define TABULACAO 290
@@ -171,13 +181,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 27 "nico.y"
+#line 40 "nico.y"
 
 	int num;
 	char *cadeia;
 	struct _node *no;
 
-#line 181 "y.tab.h"
+#line 191 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -202,6 +212,8 @@ struct YYLTYPE
 
 extern YYSTYPE yylval;
 extern YYLTYPE yylloc;
+
 int yyparse (void);
+
 
 #endif /* !YY_YY_Y_TAB_H_INCLUDED  */
