@@ -1,0 +1,20 @@
+ENTRY: j;
+	Type: 2;
+	Size: 4;
+	Desloc: 12.
+
+ENTRY: x;
+	Type: 1;
+	Size: 4;
+	Desloc: 0.
+
+ENTRY: y;
+	Type: 2;
+	Size: 4;
+	Desloc: 4.
+
+ENTRY: z;
+	Type: 1;
+	Size: 4;
+	Desloc: 8.
+

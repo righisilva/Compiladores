@@ -208,3 +208,33 @@ char * str_entry(char * retbuffer, entry_t* entry) {
     return retbuffer;
 }
 
+
+
+
+int buscaDesloc(symbol_t table, char* name) {
+    // A partir de um nome, calcula um hash
+    // para associá-lo a um número inteiro
+    int hash = hashpjw(name);
+    // que será um índice para acessar a tabela de símbolos.
+    // verifica se existe ponteiro
+    if(table.entries[hash] != NULL) {
+
+        struct table_node_entry * atual = table.entries[hash]; // inicia com o primeiro nodo da lista encadeada
+
+        // se não for a "entry" que estamos procurando (o "name" é diferente) e ainda existe um nodo seguinte...
+        while(( strcmp(name, atual->entry_data->name)) && (atual->next != NULL)) {
+            atual = atual->next; // vai para o nodo seguinte
+        }
+
+    // se existe, retorna o ponteiro
+//        return table.entries[hash];
+        if( ! strcmp(name, atual->entry_data->name)) { // se o "name" é igual
+            return atual->entry_data->desloc;
+        } else { // se o "name" não é igual, foi até o fim da lista encadeada e não encontrou, então retorna NULL
+            return -1;
+        }
+    } else {
+    // senão, retorna null
+        return -1;
+    }
+}

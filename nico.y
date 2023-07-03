@@ -186,7 +186,7 @@ parametro:   tipo id {$$ = create_node(@1.first_line, declaracao_node, NULL, $1,
            | tipo id pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);}
            ;
 
-atribuicao:  igualdade valor pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2,  NULL);}
+atribuicao:  igualdade valor pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, NULL);}
            | igualdade aritmeticas {$$ = create_node(@1.first_line, code_node, NULL, $1, $2,  NULL);}
            | igualdade funcao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2,  NULL);}
            ;
@@ -274,10 +274,10 @@ tipo:        DEF_INT {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, 
 id:          IDENTIFICADOR  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            ;
 
-valor:       INTEIRO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
-           | QUEBRADO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
-           | FRASE  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
-           | LETRA  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
+valor:       INTEIRO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); printf("\n%s\n", yylval.cadeia);}
+           | QUEBRADO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); printf("\n%s\n", yylval.cadeia);}
+           | FRASE  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); printf("\n%s\n", yylval.cadeia);}
+           | LETRA  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); printf("\n%s\n", yylval.cadeia);}
            ;
 
 pontuacao:   PONTOVIRGULA {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}

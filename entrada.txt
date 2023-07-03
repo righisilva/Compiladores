@@ -2,7 +2,7 @@ define var 5
 define teste 6
 
 inicia principal () 
-    inteiro x = 12;
+    inteiro x = "mml";
     quebrado y = 1,25;
     inteiro z;
     quebrado j = x + y;

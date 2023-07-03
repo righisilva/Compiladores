@@ -110,4 +110,5 @@ int print_table(symbol_t table);
  */
 int print_file_table(FILE* out, symbol_t table);
 
+int buscaDesloc(symbol_t table, char* name);
 #endif

@@ -2,6 +2,7 @@
 
 int vars_size = 0;
 int temps_size = 0;
+int line_number = 1;
 
 struct tac* create_inst_tac(const char* res, const char* arg1, const char* op, const char* arg2) {
     struct tac* inst = (struct tac*)malloc(sizeof(struct tac));
@@ -21,8 +22,9 @@ void print_inst_tac(FILE* out, struct tac i) {
 
 void print_tac(FILE* out, struct node_tac* code) {
     struct node_tac* current = code;
-    int line_number = 1;
+
     while (current != NULL) {
+        // fprintf(out, "teste");
         fprintf(out, "%03d: ", line_number++);
         print_inst_tac(out, *(current->inst));
         current = current->next;

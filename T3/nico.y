@@ -7,12 +7,32 @@
    */
 	#include <stdio.h>
 	#include <stdlib.h>
+	#include <ctype.h>
+
 	#include "node.h"
     #include "symbol_table.h"
     #include "lista.h"
 
 
     // extern int temps_size;
+
+    int hasNumber(const char* str) {
+        int hasDigit = 0;
+        int hasDot = 0;
+
+        for (int i = 0; str[i] != '\0'; i++) {
+            if (isdigit(str[i])) {
+                hasDigit = 1;
+            } else if (str[i] == ',' && !hasDot) {
+                hasDot = 1;
+                hasDigit = 1;
+            } else {
+                return 0; // Caractere não numérico encontrado
+            }
+        }
+
+        return hasDigit;
+    }
 
     char *gera_temp (int type){
         int size = 4;
@@ -22,10 +42,46 @@
         return ret;
     }
 
+    char *geraEnd (int endereco){
+        char *ret = malloc(sizeof(char)*8);
+        sprintf(ret, "%03d(Rx)", endereco);
+        return ret;
+    }
+
+
+
+
     symbol_t symbol_table; // Declare a tabela de símbolos
     int tipo = 0; //int = 1, float = 2, char = 3, string = 4
     int tamanho = 4;    /**< numero de Bytes necessarios para armazenamento. */
     int desloc = 0;  /**< Endereco da proxima variavel. */
+    char* func;
+    char* op1;
+    char* op2;
+
+
+    void operandos (char *op1, char *op2){
+        if (!hasNumber(op1))
+            strcpy (op1, geraEnd (buscaDesloc(symbol_table, op1)));
+            // *op1 = geraEnd (buscaDesloc(symbol_table, op1));
+
+        if (!hasNumber(op2))
+            strcpy (op2, geraEnd (buscaDesloc(symbol_table, op2)));
+            // *op2 = geraEnd (buscaDesloc(symbol_table, op2));
+    }
+
+    char *operador (char *op){
+        if (op[0] == '+')
+            return "ADD";
+        if (op[0] == '-')
+            return "SUB";
+        if (op[0] == '*')
+            return "MULT";
+        if (op[0] == '/')
+            return "DIV";
+    }
+
+
 
 
 /*    extern int yyparse();*/
@@ -209,7 +265,21 @@ atribuicao:  igualdade expressao pontuacao {$$ = create_node(@1.first_line, decl
            | igualdade funcao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2,  NULL);}
            ;
 
-atr_oper:    id igualdade aritmeticas pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4,  NULL);}
+atr_oper:    id igualdade aritmeticas pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4,  NULL);
+
+            $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
+            cat_tac(&($$->attribute->code), &($3->attribute->code));
+            // append_inst_tac(&($$->attribute->code), new_tac);
+            FILE* file = fopen("teste.txt", "a");
+                if (file == NULL) {
+                    printf("Erro ao abrir o arquivo.\n");
+                    exit(1);
+                }
+                print_tac(file, $$->attribute->code);
+                fclose(file);
+
+
+            }
            | id igualdade funcao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3,  NULL);}
            ;
 
@@ -231,15 +301,26 @@ funcao:      id abrep fechap pontuacao {$$ = create_node(@1.first_line, acao_nod
            ;
 
 expressao:   valor {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
-           | aritmetica {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+           | aritmetica {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);
+           $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
+           cat_tac(&($$->attribute->code), &($1->attribute->code));
+           }
+
            ;
 
-aritmeticas: expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+aritmeticas: expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);
+
+           $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
+           cat_tac(&($$->attribute->code), &($1->attribute->code));
+            }
            | aritmeticas operador expressao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
            ;
 
-aritmetica:  operando operador operando {$$ = create_node(@1.first_line, code_node, gera_temp(tipo), $1, $2, $3, NULL); printf("\n%s %s %s \n\n", $1->lexeme, $2->lexeme, $3->lexeme);
-                struct tac* new_tac = create_inst_tac ($$->lexeme, $1->lexeme, $2->lexeme, $3->lexeme);
+aritmetica:  operando operador operando {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL); printf("\n%s %s %s \n\n", $1->lexeme, $2->lexeme, $3->lexeme);
+                int x = hasNumber ($3->lexeme);
+                operandos ($3->lexeme, $1->lexeme);
+                char *nomeOperador = operador($2->lexeme);
+                struct tac* new_tac = create_inst_tac (nomeOperador, $3->lexeme, $1->lexeme, ""); //op arg2 arg1 NULL
                $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
                $1->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
                $3->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
@@ -248,13 +329,13 @@ aritmetica:  operando operador operando {$$ = create_node(@1.first_line, code_no
                 append_inst_tac(&($$->attribute->code), new_tac);
 
 
-                FILE* file = fopen("teste.txt", "a");
-                if (file == NULL) {
-                    printf("Erro ao abrir o arquivo.\n");
-                    exit(1);
-                }
-                print_tac(file, $$->attribute->code);
-                fclose(file);
+                // FILE* file = fopen("teste.txt", "a");
+                // if (file == NULL) {
+                //     printf("Erro ao abrir o arquivo.\n");
+                //     exit(1);
+                // }
+                // print_tac(file, $$->attribute->code);
+                // fclose(file);
             }
            | incdec {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
            | incdec pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, NULL);}
@@ -268,8 +349,18 @@ id:          IDENTIFICADOR  {$$ = create_node(@1.first_line, tipo_node, yylval.c
                 new_entry->size = tamanho;
                 new_entry->desloc = desloc;
                 new_entry->extra = NULL;
-                insert(&symbol_table, new_entry);
-                desloc += tamanho;
+                if(lookup(symbol_table, new_entry->name) == NULL){
+                    insert(&symbol_table, new_entry);
+                    desloc += tamanho;
+                }
+                FILE* file = fopen("tebela.txt", "w");
+                if (file == NULL) {
+                    printf("Erro ao abrir o arquivo.\n");
+                    exit(1);
+                }
+                print_file_table(file, symbol_table);
+                fclose(file);
+                printf ("\t\t%s\n\n", geraEnd (buscaDesloc(symbol_table, yylval.cadeia)));
                 // print_table(symbol_table);
                 // struct node_tac* code = (node_tac*)malloc(sizeof(node_tac));
                 // EXPR_ATTR* expr_attr = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
