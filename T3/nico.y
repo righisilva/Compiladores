@@ -245,7 +245,12 @@ declaracoes: declaracao {$$ = create_node(@1.first_line, declaracoes_node, NULL,
            | declaracoes declaracao {$$ = create_node(@1.first_line, declaracoes_node, NULL, $1, $2, NULL);}
            ;
 
-declaracao:  tipo id atribuicao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, NULL);}
+declaracao:  tipo id atribuicao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, NULL);
+            //TODO
+
+
+
+            }
            | tipo id pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, NULL);}
            | ini princ abrep parametros fechap code term  {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, $4, $5, $6, $7, NULL);}
            | ini princ abrep fechap code term  {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, $4, $5, $6, NULL);}
@@ -267,8 +272,10 @@ atribuicao:  igualdade expressao pontuacao {$$ = create_node(@1.first_line, decl
 
 atr_oper:    id igualdade aritmeticas pontuacao {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, $4,  NULL);
 
+
             $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
             cat_tac(&($$->attribute->code), &($3->attribute->code));
+            strcpy($$->attribute->code->inst->op, geraEnd (buscaDesloc(symbol_table, $1->lexeme)));
             // append_inst_tac(&($$->attribute->code), new_tac);
             FILE* file = fopen("teste.txt", "a");
                 if (file == NULL) {
@@ -320,7 +327,7 @@ aritmetica:  operando operador operando {$$ = create_node(@1.first_line, code_no
                 int x = hasNumber ($3->lexeme);
                 operandos ($3->lexeme, $1->lexeme);
                 char *nomeOperador = operador($2->lexeme);
-                struct tac* new_tac = create_inst_tac (nomeOperador, $3->lexeme, $1->lexeme, ""); //op arg2 arg1 NULL
+                struct tac* new_tac = create_inst_tac ($1->lexeme, nomeOperador, "", $3->lexeme); //op arg2 arg1 NULL
                $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
                $1->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
                $3->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
@@ -471,7 +478,11 @@ term:        TERMINA {$$ = create_node(@1.first_line, code_node, yylval.cadeia, 
 princ:       PRINCIPAL {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
            ;
 
-imprime:     IMPRIME {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}
+imprime:     IMPRIME {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);
+            //TODO
+
+
+            }
            ;
 
 frase:       FRASE {$$ = create_node(@1.first_line, code_node, yylval.cadeia, NULL);}

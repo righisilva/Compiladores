@@ -1,6 +1,30 @@
-001: 004(Rx) ADD 008(Rx) 
+001: 004(Rx) SUB 008(Rx) 
 002: 008(Rx) DIV 2 
 003: 000(Rx) MULT 008(Rx) 
 001: 004(Rx) SUB 008(Rx) 
 002: 008(Rx) DIV 2 
 003: 000(Rx) MULT 008(Rx) 
+001: 004(Rx) teste 008(Rx) 
+002: 008(Rx) teste 2 
+003: 000(Rx) teste 008(Rx) 
+001: teste SUB 008(Rx) 
+002: teste DIV 2 
+003: teste MULT 008(Rx) 
+001: 004(Rx) SUB teste 
+002: 008(Rx) DIV teste 
+003: 000(Rx) MULT teste 
+001: 004(Rx) SUB 008(Rx) teste
+002: 008(Rx) DIV 2 teste
+003: 000(Rx) MULT 008(Rx) teste
+001:  teste SUB 008(Rx)
+002:  teste DIV 2
+003:  teste MULT 008(Rx)
+001: teste 004(Rx) SUB 008(Rx)
+002: teste 008(Rx) DIV 2
+003: teste 000(Rx) MULT 008(Rx)
+001: z 004(Rx) SUB 008(Rx)
+002: y 008(Rx) DIV 2
+003: x 000(Rx) MULT 008(Rx)
+001: 008(Rx) 004(Rx) SUB 008(Rx)
+002: 004(Rx) 008(Rx) DIV 2
+003: 000(Rx) 000(Rx) MULT 008(Rx)
