@@ -248,6 +248,18 @@ declaracoes: declaracao {$$ = create_node(@1.first_line, declaracoes_node, NULL,
 declaracao:  tipo id atribuicao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3, NULL);
             //TODO
 
+            $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
+            cat_tac(&($$->attribute->code), &($3->attribute->code));
+            strcpy($$->attribute->code->inst->op, geraEnd (buscaDesloc(symbol_table, $2->lexeme)));
+            // append_inst_tac(&($$->attribute->code), new_tac);
+            FILE* file = fopen("teste.txt", "a");
+                if (file == NULL) {
+                    printf("Erro ao abrir o arquivo.\n");
+                    exit(1);
+                }
+                print_tac(file, $$->attribute->code);
+                fclose(file);
+
 
 
             }
@@ -266,7 +278,12 @@ parametro:   tipo id {$$ = create_node(@1.first_line, declaracao_node, NULL, $1,
            | tipo id pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);}
            ;
 
-atribuicao:  igualdade expressao pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);}
+atribuicao:  igualdade expressao pontuacao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2, $3,  NULL);
+
+           $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
+            cat_tac(&($$->attribute->code), &($2->attribute->code));
+
+            }
            | igualdade funcao {$$ = create_node(@1.first_line, declaracao_node, NULL, $1, $2,  NULL);}
            ;
 
@@ -307,7 +324,8 @@ funcao:      id abrep fechap pontuacao {$$ = create_node(@1.first_line, acao_nod
            | id abrep parametros fechap pontuacao {$$ = create_node(@1.first_line, acao_node, NULL, $1, $2, $3, $4, $5, NULL);}
            ;
 
-expressao:   valor {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
+expressao:   valor {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);
+            }
            | aritmetica {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);
            $$->attribute = (EXPR_ATTR*) malloc(sizeof(EXPR_ATTR));
            cat_tac(&($$->attribute->code), &($1->attribute->code));

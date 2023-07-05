@@ -1,9 +1,9 @@
 
 inicia principal () 
-    inteiro x = 12;
-    quebrado y = 1,25;
-    inteiro z;
-    quebrado j = x + y;
+    quebrado x = 1;
+    inteiro y;
+    quebrado z;
+    inteiro j = x + y;
     z = y - z;
     y = z / 2;
     x = x * z;

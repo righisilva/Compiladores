@@ -7,74 +7,13 @@
    */
 	#include <stdio.h>
 	#include <stdlib.h>
-	#include <ctype.h>
-
 	#include "node.h"
     #include "symbol_table.h"
-    #include "lista.h"
-
-
-    int hasNumber(const char* str) {
-        int hasDigit = 0;
-        int hasDot = 0;
-
-        for (int i = 0; str[i] != '\0'; i++) {
-            if (isdigit(str[i])) {
-                hasDigit = 1;
-            } else if (str[i] == ',' && !hasDot) {
-                hasDot = 1;
-                hasDigit = 1;
-            } else {
-                return 0; // Caractere não numérico encontrado
-            }
-        }
-
-        return hasDigit;
-    }
-
-    char *gera_temp (int type){
-        int size = 4;
-        char *ret = malloc(sizeof(char)*8);
-        sprintf(ret, "%03d(Rx)", temps_size);
-        temps_size += size;
-        return ret;
-    }
-
-    char *geraEnd (int endereco){
-        char *ret = malloc(sizeof(char)*8);
-        sprintf(ret, "%03d(Rx)", endereco);
-        return ret;
-    }
 
     symbol_t symbol_table; // Declare a tabela de símbolos
     int tipo = 0; //int = 1, float = 2, char = 3, string = 4
     int tamanho = 4;    /**< numero de Bytes necessarios para armazenamento. */
     int desloc = 0;  /**< Endereco da proxima variavel. */
-    char* func;
-    char* op1;
-    char* op2;
-
-    void operandos (char *op1, char *op2){
-        if (!hasNumber(op1))
-            strcpy (op1, geraEnd (buscaDesloc(symbol_table, op1)));
-            // *op1 = geraEnd (buscaDesloc(symbol_table, op1));
-
-        if (!hasNumber(op2))
-            strcpy (op2, geraEnd (buscaDesloc(symbol_table, op2)));
-            // *op2 = geraEnd (buscaDesloc(symbol_table, op2));
-    }
-
-    char *operador (char *op){
-        if (op[0] == '+')
-            return "ADD";
-        if (op[0] == '-')
-            return "SUB";
-        if (op[0] == '*')
-            return "MULT";
-        if (op[0] == '/')
-            return "DIV";
-    }
-
 /*    extern int yyparse();*/
 
 	extern int yyerror(const char* msg );
@@ -291,9 +230,7 @@ t:           f {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
            | t operador f {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
            ;
 
-f:           operando  {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);
-
-            }
+f:           operando  {$$ = create_node(@1.first_line, code_node, NULL, $1, NULL);}
            | abrep t fechap {$$ = create_node(@1.first_line, code_node, NULL, $1, $2, $3, NULL);}
            | incdec {$$ = create_node(@1.first_line, code_node, NULL, $1,  NULL);}
            ;
@@ -349,26 +286,17 @@ tipo:        DEF_INT {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, 
            | DEF_STRING {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL); tipo = 4;}
            ;
 
-id:          IDENTIFICADOR  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);
+id:          IDENTIFICADOR  {
                 entry_t* new_entry = (entry_t*) malloc(sizeof(entry_t));
                 new_entry->name = yylval.cadeia;
                 new_entry->type = tipo;
                 new_entry->size = tamanho;
                 new_entry->desloc = desloc;
                 new_entry->extra = NULL;
-                if(lookup(symbol_table, new_entry->name) == NULL){
-                    insert(&symbol_table, new_entry);
-                    desloc += tamanho;
-                }
-                FILE* file = fopen("tebela.txt", "w");
-                if (file == NULL) {
-                    printf("Erro ao abrir o arquivo.\n");
-                    exit(1);
-                }
-                print_file_table(file, symbol_table);
-                fclose(file);
-                printf ("\t\t%s\n\n", geraEnd (buscaDesloc(symbol_table, yylval.cadeia)));
-                }
+                insert(&symbol_table, new_entry);
+                desloc += tamanho;
+                print_table(symbol_table);
+                $$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
            ;
 
 valor:       INTEIRO  {$$ = create_node(@1.first_line, tipo_node, yylval.cadeia, NULL);}
