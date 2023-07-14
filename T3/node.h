@@ -91,6 +91,16 @@ typedef int Node_type;
 #define igualex_node 562
 #define diferentelex_node 563
 
+typedef struct _myTac {
+   int numero;
+   char* recebe;
+   char* op1;
+   char* operador;
+   char* op2;
+} MyTac;
+
+extern MyTac fazTac[100];
+
 
 typedef struct expr_attr{
             struct node_tac *code;
@@ -103,6 +113,7 @@ typedef struct _node {
    int line_num;   /**< numero de linha. */
    char* lexeme;   /**< o lexema retornado pelo analizador lexical. */
    Node_type type; /**< Um dos valores definidos acima pelos # defines. */
+   char* retorno;
    EXPR_ATTR* attribute;/**< Qualquer coisa por enquanto. */
 
    struct _node** children;
@@ -129,7 +140,7 @@ extern Node * syntax_tree;
  */
 NULL_TERMINATED
 Node* create_node(int nl, Node_type t,
-        char* lexeme,  /* Node* children */ ...);
+        char* lexeme, char* lido, /* Node* children */ ...);
 
 /** Accessor to the number of children of a Node.
  *  Must abort the program if 'n' is NULL.

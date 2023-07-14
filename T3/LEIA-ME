@@ -4,14 +4,14 @@ Matrícula: 1602020028
 
 COMANDOS PARA COMPILAR:
 
-    yacc -d nico.y
+    yacc -d nico2.y
     flex analisador.l
-    gcc -c lex.yy.c y.tab.c main.c node.c
-    gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+    gcc -c lex.yy.c y.tab.c main.c node.c symbol_table.c lista.c
+    gcc -o parser lex.yy.o y.tab.o main.o node.o symbol_table.o lista.o -ll
     
 OU:
 
-        yacc -d nico.y && flex analisador.l && gcc -c lex.yy.c y.tab.c main.c node.c && gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+    yacc -d nico2.y && flex analisador.l && gcc -c lex.yy.c y.tab.c main.c node.c symbol_table.c lista.c && gcc -o parser lex.yy.o y.tab.o main.o node.o symbol_table.o lista.o -ll
     
 OU:
 
@@ -20,6 +20,4 @@ OU:
 COMANDOS PARA EXECUTAR:
     ./parser entrada.txt 
 
-
-yacc -d nico.y && flex analisador.l && gcc -c lex.yy.c y.tab.c main.c node.c symbol_table.c && gcc -o parser lex.yy.o y.tab.o main.o node.o symbol_table.o -ll
 

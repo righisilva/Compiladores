@@ -3,6 +3,8 @@
 #include <assert.h>
 
 #include "node.h"
+#include "symbol_table.h"
+#include "lista.h"
 
 /* Programa principal. */
 char* progname;
@@ -11,6 +13,7 @@ int lineno;
 extern FILE* yyin;
 extern int yyparse();
 extern Node *syntax_tree;
+extern symbol_t symbol_table; // Declare a tabela de símbolos
 
 int main(int argc, char* argv[])
 {
@@ -24,25 +27,43 @@ int main(int argc, char* argv[])
 				argv[0], argv[1]);
 		exit(-1);
 	}
-
+	FILE* file = fopen("tac.txt", "w");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        exit(1);
+    }
+    fclose(file);
 	progname = argv[0];
 
 
 
 	int result = yyparse();
+
+	if(!result)
+		printf("\nOKAY. :)\n\n");
+	else
+		printf("\nERROR. %d\n", result);
+
+
 	FILE* saida = fopen("uncompile.txt", "w");
 	if (saida != NULL){
     	uncompile2(saida, syntax_tree);
     	fclose(saida);
-    	printf("\nUncompile salvo no arquivo uncompile.txt.\n\n");
+    	printf("\nUncompile salvo no arquivo uncompile.txt.\n");
 	}else {
     	printf("Erro ao abrir o arquivo de saída.\n");
 	}
+	printf("Tabela de símbolos salva no arquivo tabela.txt.\n");
+	printf("Código TAC salvo no arquivo tac.txt.\n\n");
 
-	if(!result)
-		printf("OKAY. :)\n\n");
-	else
-		printf("ERROR. %d\n", result);
+	// FILE* tab = fopen("tabela.txt", "w");
+	// if (tab != NULL){
+ //    	print_file_table(tab, symbol_table);
+ //    	fclose(saida);
+ //    	printf("\nTabela de símbolos salva no arquivo tabela.txt.\n\n");
+	// }else {
+ //    	printf("Erro ao abrir o arquivo de tabela.\n");
+	// }
 
 	// uncompile(syntax_tree);
 

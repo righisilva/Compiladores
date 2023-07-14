@@ -181,7 +181,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 88 "nico2.y"
+#line 91 "nico2.y"
 
 	int num;
 	char *cadeia;

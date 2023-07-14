@@ -7,17 +7,18 @@
 
 Node *syntax_tree;
 
-Node* create_node(int nl, Node_type t, char* lexeme,  /* Node* children */ ...)
+Node* create_node(int nl, Node_type t, char* lexeme,  char* lido, /* Node* children */ ...)
 {
 
     Node* new_node = (Node*) malloc(sizeof(Node));
     new_node->line_num = nl;   /**< numero de linha. */
     new_node->lexeme = lexeme;   /**< o lexema retornado pelo analizador lexical. */
     new_node->type = t; /**< Um dos valores definidos acima pelos # defines. */
+    new_node->retorno = lido;
 
     //contar os filhos
     va_list ap;
-    va_start(ap, lexeme);
+    va_start(ap, lido);
 
     int n_args = 0;
     const struct _node* arg = va_arg(ap, const struct _node*);
@@ -34,7 +35,7 @@ Node* create_node(int nl, Node_type t, char* lexeme,  /* Node* children */ ...)
     new_node->children = calloc(n_args, sizeof(struct _node*));
     va_end(ap);
     //preencher
-    va_start(ap, lexeme);
+    va_start(ap, lido);
     n_args = 0;
     for (arg = va_arg(ap, const struct _node*); arg != NULL; arg = va_arg(ap, const struct _node*)){
         new_node->children[n_args] = (struct _node*) arg;

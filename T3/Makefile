@@ -1,18 +1,10 @@
-all: parser
+parser: lex.yy.o y.tab.o main.o node.o symbol_table.o lista.o
+	gcc -o parser lex.yy.o y.tab.o main.o node.o symbol_table.o lista.o -ll
 
-y.tab.c: nico.y
-	yacc -d nico.y
-
-y.tab.h: nico.y
-	yacc -d nico.y
-
-lex.yy.c: analisador.l y.tab.h
-	flex analisador.l
-
-lex.yy.o: lex.yy.c
+lex.yy.o: lex.yy.c y.tab.h
 	gcc -c lex.yy.c
 
-y.tab.o: y.tab.c
+y.tab.o: y.tab.c y.tab.h
 	gcc -c y.tab.c
 
 main.o: main.c
@@ -21,9 +13,18 @@ main.o: main.c
 node.o: node.c
 	gcc -c node.c
 
-parser: lex.yy.o y.tab.o main.o node.o
-	gcc -o parser lex.yy.o y.tab.o main.o node.o -ll
+symbol_table.o: symbol_table.c
+	gcc -c symbol_table.c
+
+lista.o: lista.c
+	gcc -c lista.c
+
+lex.yy.c: analisador.l
+	flex analisador.l
+
+y.tab.c y.tab.h: nico2.y
+	yacc -d nico2.y
 
 clean:
-	rm -f lex.yy.c y.tab.c y.tab.h lex.yy.o y.tab.o main.o node.o parser
+	rm -f parser lex.yy.o y.tab.o main.o node.o symbol_table.o lista.o lex.yy.c y.tab.c y.tab.h
 
